@@ -9,6 +9,7 @@ import {
   PermissionFlagsBits,
   type ButtonInteraction,
   type ChannelSelectMenuInteraction,
+  type UserSelectMenuInteraction,
   type ChatInputCommandInteraction,
   type Client,
   type Interaction,
@@ -39,6 +40,8 @@ import {
   type ImportCounters,
 } from './importCommand.js';
 import { IMPORT_PREFIX, type ImportSessionStore } from './importPanel.js';
+import { handlePanelButton, handlePanelModal, handlePanelSelect } from '../features/voice/controlPanelHandlers.js';
+import { PANEL_PREFIX, PANEL_MODAL_PREFIX } from '../features/voice/controlPanel.js';
 import {
   expiredInteractionMessage,
   SITE_URL,
@@ -342,6 +345,7 @@ export function registerInteractionHandler(deps: InteractionDeps): () => void {
     if (interaction.isButton()) return handleButton(interaction, entitled);
     if (interaction.isChannelSelectMenu()) return handleChannelSelect(interaction);
     if (interaction.isStringSelectMenu()) return handleStringSelect(interaction);
+    if (interaction.isUserSelectMenu()) return handleUserSelect(interaction);
     if (interaction.isModalSubmit()) return handleModal(interaction);
   }
 
@@ -2566,6 +2570,21 @@ Already subscribed? Add the new server ` +
   ]);
 
   /** A voice-channel was chosen from a `avc:setup:pick:<command>` menu → run the command. */
+  async function handleUserSelect(interaction: UserSelectMenuInteraction): Promise<void> {
+    const handled = await handlePanelSelect(interaction, {
+      voiceCommands: deps.voiceCommands,
+      privacy: deps.privacy,
+      votekick: deps.votekick,
+      run,
+      formatResult,
+    });
+    if (!handled) {
+      await interaction.reply({
+        content: 'Dat menu is verlopen. Klik opnieuw op Overdragen.',
+        ephemeral: true,
+      });
+    }
+  }
   async function handleChannelSelect(interaction: ChannelSelectMenuInteraction): Promise<void> {
     const command = parseSetupPick(interaction.customId);
     if (!command) return;
@@ -2660,6 +2679,36 @@ Already subscribed? Add the new server ` +
       return handleImportButton(interaction, importDependencies);
     }
     if (interaction.customId.startsWith(SETUP_PREFIX)) return handleSetupButton(interaction);
+    if (interaction.customId.startsWith(PANEL_PREFIX)) {
+      const parsedPanel = interaction.customId.slice(PANEL_PREFIX.length).split(':');
+      if (parsedPanel[0] === 'name') {
+        const targetChannelId = parsedPanel[1];
+        if (targetChannelId) {
+          const state = await run(interaction.guildId!, 'panel:name:state', () =>
+            deps.feature.getEditorState('channel', interaction.guildId!, targetChannelId),
+          );
+          if (!state.found) {
+            await interaction.reply({
+              content: "Dat is geen door de bot beheerd spraakkanaal.",
+              ephemeral: true,
+            });
+            return;
+          }
+          await interaction.reply({
+            ...renderEditorPanel('channel', targetChannelId, state),
+            ephemeral: true,
+          });
+          return;
+        }      }
+      const handled = await handlePanelButton(interaction, {
+        voiceCommands: deps.voiceCommands,
+        privacy: deps.privacy,
+        votekick: deps.votekick,
+        run,
+        formatResult,
+      });
+      if (handled) return;
+    }
 
     /**
      * Nothing claimed this id. Answering matters because falling off the end
@@ -2775,6 +2824,16 @@ Already subscribed? Add the new server ` +
     if (interaction.customId === 'avc:alias') return handleAliasSubmit(interaction);
     if (interaction.customId === ALIAS_MODAL_ID) return handleAliasSubmit(interaction);
     if (interaction.customId.startsWith(ALIAS_PREFIX)) return handleAliasEditSubmit(interaction);
+    if (interaction.customId.startsWith(PANEL_MODAL_PREFIX)) {
+      const handled = await handlePanelModal(interaction, {
+        voiceCommands: deps.voiceCommands,
+        privacy: deps.privacy,
+        votekick: deps.votekick,
+        run,
+        formatResult,
+      });
+      if (handled) return;
+    }
   }
 
   /** The `/setup` "no game" label modal submit. */

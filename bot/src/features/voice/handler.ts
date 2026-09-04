@@ -26,6 +26,7 @@ import {
   type VoiceSettings,
 } from './guildSettings.js';
 import { isPermissionError } from './discordAdapter.js';
+import { buildControlPanelRows } from './controlPanel.js';
 import {
   permissionProblemMessage,
   type PermissionOperation,
@@ -701,6 +702,17 @@ export class VoiceFeature {
       }
     }
 
+    try {
+      await this.deps.actions.postMessage(guildId, newChannelId, {
+        content: '**Snelle acties**',
+        components: buildControlPanelRows(newChannelId),
+      });
+    } catch (err) {
+      this.deps.logger.warn(
+        { guildId, secondaryId: newChannelId, err },
+        'could not post control panel',
+      );
+    }
     try {
       await this.deps.actions.moveMember(guildId, member.id, newChannelId);
     } catch (err) {

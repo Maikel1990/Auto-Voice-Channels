@@ -1,4 +1,6 @@
 import {
+  type ActionRowBuilder,
+  type ButtonBuilder,
   ActivityType,
   ChannelType,
   DiscordAPIError,
@@ -601,6 +603,22 @@ export class DiscordVoiceActions implements VoiceActions {
       await member.voice.setChannel(channelId);
     } catch (err) {
       if (isApiError(err, UNKNOWN_MEMBER) || isApiError(err, UNKNOWN_CHANNEL)) return;
+      throw err;
+    }
+  }
+
+  async postMessage(
+    _guildId: string,
+    channelId: string,
+    payload: { content?: string; components?: readonly ActionRowBuilder<ButtonBuilder>[] },
+  ): Promise<string | undefined> {
+    try {
+      const channel = await this.client.channels.fetch(channelId);
+      if (!channel?.isTextBased() || !('send' in channel)) return undefined;
+      const sent = await channel.send(payload);
+      return sent.id;
+    } catch (err) {
+      if (isApiError(err, UNKNOWN_CHANNEL)) return undefined;
       throw err;
     }
   }

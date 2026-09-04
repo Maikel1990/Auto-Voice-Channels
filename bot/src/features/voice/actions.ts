@@ -1,4 +1,4 @@
-import { DiscordAPIError } from 'discord.js';
+import { DiscordAPIError, type ActionRowBuilder, type ButtonBuilder } from 'discord.js';
 
 /**
  * The Discord side-effect seam. Feature logic depends only on this interface, so
@@ -110,6 +110,12 @@ export interface VoiceActions {
   createJoinChannel(guildId: string, name: string, nearChannelId: string): Promise<string>;
   /** Sets a voice channel's status (`''` clears it). Separate, laxer rate limit. */
   setVoiceStatus(guildId: string, channelId: string, status: string): Promise<void>;
+  /** Posts a message with components (e.g. buttons) to a text-based channel. */
+  postMessage(
+    guildId: string,
+    channelId: string,
+    payload: { content?: string; components?: readonly ActionRowBuilder<ButtonBuilder>[] },
+  ): Promise<string | undefined>;
   /**
    * Repositions a set of channels as a contiguous block directly above or below a
    * primary, in the given top-to-bottom order, via a single bulk reorder. Used by
@@ -164,6 +170,12 @@ export type RecordedAction =
       nearChannelId: string;
     }
   | { type: 'status'; guildId: string; channelId: string; status: string }
+  | {
+      type: 'postMessage';
+      guildId: string;
+      channelId: string;
+      payload: { content?: string; components?: readonly ActionRowBuilder<ButtonBuilder>[] };
+    }
   | {
       type: 'reposition';
       guildId: string;
@@ -338,6 +350,15 @@ export class RecordingVoiceActions implements VoiceActions {
   setVoiceStatus(guildId: string, channelId: string, status: string): Promise<void> {
     this.actions.push({ type: 'status', guildId, channelId, status });
     return Promise.resolve();
+  }
+  postMessage(
+    guildId: string,
+    channelId: string,
+    payload: { content?: string; components?: readonly ActionRowBuilder<ButtonBuilder>[] },
+  ): Promise<string | undefined> {
+    const messageId = `${this.idPrefix}-msg-${++this.seq}`;
+    this.actions.push({ type: 'postMessage', guildId, channelId, payload });
+    return Promise.resolve(messageId);
   }
 
   repositionSecondaries(
