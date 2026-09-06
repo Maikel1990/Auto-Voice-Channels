@@ -85,7 +85,7 @@ export class PrivacyService {
     this.rerenderDetached(guildId, channelId, 'private');
 
     this.deps.logger.info({ guildId, channelId, joinChannelId }, 'channel made private');
-    return ok('🔒 Your channel is now private. Others can ask to join via the **⇩ Join** channel.');
+    return ok('🔒 Je kanaal is nu privé. Anderen kunnen via het **⇩ Join**-kanaal vragen om lid te worden.');
   }
 
   /**
@@ -212,7 +212,7 @@ export class PrivacyService {
         `Could not ${block ? 'block' : 'deny'} <@${requesterId}>: ${describeError(err)}.`,
       );
     }
-    return ok(block ? `Blocked <@${requesterId}>.` : `Denied <@${requesterId}>.`);
+    return ok(block ? `<@${requesterId}> geblokkeerd.` : `<@${requesterId}> geweigerd.`);
   }
 
   /** Cleans up a private channel's companion when the channel goes away. */

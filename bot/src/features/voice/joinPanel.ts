@@ -18,15 +18,15 @@ export function buildJoinRow(
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(joinId('approve', joinChannelId, requesterId))
-      .setLabel('Approve')
+      .setLabel('Goedkeuren')
       .setStyle(ButtonStyle.Success),
     new ButtonBuilder()
       .setCustomId(joinId('deny', joinChannelId, requesterId))
-      .setLabel('Deny')
+      .setLabel('Weigeren')
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId(joinId('block', joinChannelId, requesterId))
-      .setLabel('Block')
+      .setLabel('Blokkeren')
       .setStyle(ButtonStyle.Danger),
   );
 }

@@ -49,7 +49,7 @@ export function registerJoinRequests(deps: JoinRequestsDeps): () => void {
     const secondary = await deps.client.channels.fetch(ctx.secondaryChannelId).catch(() => null);
     if (secondary?.isTextBased() && 'send' in secondary) {
       await secondary.send({
-        content: `🔔 <@${ctx.creatorId}>, <@${requesterId}> would like to join.`,
+        content: `🔔 <@${ctx.creatorId}>, <@${requesterId}> wil graag lid worden.`,
         components: [buildJoinRow(joinChannelId, requesterId)],
       });
     }

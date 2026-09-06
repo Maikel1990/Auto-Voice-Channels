@@ -1,0 +1,15 @@
+{
+  "bot/src/features/voice/joinRequests.ts": {
+    "would like to join.": "wil graag lid worden."
+  },
+  "bot/src/features/voice/privacy.ts": {
+    "Your channel is now private. Others can ask to join via the **⇩ Join** channel.": "Je kanaal is nu privé. Anderen kunnen via het **⇩ Join**-kanaal vragen om lid te worden.",
+    "Blocked <@${requesterId}>.": "<@${requesterId}> geblokkeerd.",
+    "Denied <@${requesterId}>.": "<@${requesterId}> geweigerd."
+  },
+  "bot/src/features/voice/joinPanel.ts": {
+    ".setLabel('Approve')": ".setLabel('Goedkeuren')",
+    ".setLabel('Deny')": ".setLabel('Weigeren')",
+    ".setLabel('Block')": ".setLabel('Blokkeren')"
+  }
+}

@@ -16,3 +16,6 @@ plans/
 # for the root-level scratch directory the legacy migration used.
 /migrate/
 .claude/
+
+update.log
+update-*.sh

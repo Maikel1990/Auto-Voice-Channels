@@ -58,10 +58,12 @@ export function buildCommandDefinitions(
       new SlashCommandBuilder()
         .setName('limit')
         .setDescription('Set the user limit on your voice channel (0 = unlimited).')
+        .setDescriptionLocalizations({ nl: "Stel de gebruikerslimiet in voor je spraakkanaal (0 = onbeperkt)." })
         .addIntegerOption((o) =>
           o
             .setName('count')
             .setDescription(`Maximum members (0 to ${MAX_USER_LIMIT}).`)
+        .setDescriptionLocalizations({ nl: "Maximaal aantal leden (0 tot ${MAX_USER_LIMIT})." })
             .setMinValue(0)
             .setMaxValue(MAX_USER_LIMIT)
             .setRequired(true),
@@ -70,36 +72,43 @@ export function buildCommandDefinitions(
     guildOnly(
       new SlashCommandBuilder()
         .setName('unlimit')
-        .setDescription('Remove the user limit on your voice channel.'),
+        .setDescription('Remove the user limit on your voice channel.')
+        .setDescriptionLocalizations({ nl: "Verwijder de gebruikerslimiet van je spraakkanaal." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('name')
-        .setDescription('Open a panel to rename your voice channel.'),
+        .setDescription('Open a panel to rename your voice channel.')
+        .setDescriptionLocalizations({ nl: "Open een paneel om je spraakkanaal te hernoemen." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('private')
-        .setDescription('Make your voice channel private (lock out @everyone).'),
+        .setDescription('Make your voice channel private (lock out @everyone).')
+        .setDescriptionLocalizations({ nl: "Maak je spraakkanaal privé (sluit @everyone buiten)." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('public')
-        .setDescription('Reopen your voice channel to @everyone.'),
+        .setDescription('Reopen your voice channel to @everyone.')
+        .setDescriptionLocalizations({ nl: "Open je spraakkanaal weer voor @everyone." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('reclaim')
-        .setDescription('Reclaim your channel from a caretaker, or claim one whose owner left.'),
+        .setDescription('Reclaim your channel from a caretaker, or claim one whose owner left.')
+        .setDescriptionLocalizations({ nl: "Neem je kanaal terug van een beheerder, of claim een kanaal waarvan de eigenaar is vertrokken." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('transfer')
         .setDescription('Transfer ownership of your voice channel to another member.')
+        .setDescriptionLocalizations({ nl: "Draag het eigenaarschap van je spraakkanaal over aan een ander lid." })
         .addUserOption((o) =>
           o
             .setName('member')
             .setDescription('The new owner (must be in the channel).')
+        .setDescriptionLocalizations({ nl: "De nieuwe eigenaar (moet in het kanaal zijn)." })
             .setRequired(true),
         ) as SlashCommandBuilder,
     ),
@@ -107,11 +116,14 @@ export function buildCommandDefinitions(
       new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Start a vote to kick a member from your voice channel.')
+        .setDescriptionLocalizations({ nl: "Start een stemming om een lid uit je spraakkanaal te schoppen." })
         .addUserOption((o) =>
-          o.setName('member').setDescription('The member to votekick.').setRequired(true),
+          o.setName('member').setDescription('The member to votekick.')
+        .setDescriptionLocalizations({ nl: "Het lid om te votekicken." }).setRequired(true),
         )
         .addStringOption((o) =>
-          o.setName('reason').setDescription('Why (optional).').setRequired(false),
+          o.setName('reason').setDescription('Why (optional).')
+        .setDescriptionLocalizations({ nl: "Waarom (optioneel)." }).setRequired(false),
         ) as SlashCommandBuilder,
     ),
     guildOnly(
@@ -122,27 +134,32 @@ export function buildCommandDefinitions(
           o
             .setName('name')
             .setDescription('Your custom name, or "reset".')
+        .setDescriptionLocalizations({ nl: "Je eigen naam, of \"reset\"." })
             .setRequired(true)
             .setMaxLength(80),
         ) as SlashCommandBuilder,
     ),
     guildOnly(
-      new SlashCommandBuilder().setName('ping').setDescription("Check the bot's responsiveness."),
+      new SlashCommandBuilder().setName('ping').setDescription("Check the bot's responsiveness.")
+        .setDescriptionLocalizations({ nl: "Controleer de reactiesnelheid van de bot." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('invite')
-        .setDescription('Get a link to invite this bot to another server.'),
+        .setDescription('Get a link to invite this bot to another server.')
+        .setDescriptionLocalizations({ nl: "Krijg een link om deze bot naar een andere server uit te nodigen." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('source')
-        .setDescription("Get a link to this bot's source code."),
+        .setDescription("Get a link to this bot's source code.")
+        .setDescriptionLocalizations({ nl: "Krijg een link naar de broncode van deze bot." }),
     ),
     guildOnly(
       new SlashCommandBuilder()
         .setName('setup')
-        .setDescription('Get started with Auto-Voice-Channels: status, setup, and quick actions.'),
+        .setDescription('Get started with Auto-Voice-Channels: status, setup, and quick actions.')
+        .setDescriptionLocalizations({ nl: "Aan de slag met Auto-Voice-Channels: status, instellingen en snelle acties." }),
     ),
     /**
      * Open to everyone, deliberately, and the one admin-shaped command that is

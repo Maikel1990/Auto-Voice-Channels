@@ -1,0 +1,21 @@
+{
+  "Set the user limit on your voice channel (0 = unlimited).": "Stel de gebruikerslimiet in voor je spraakkanaal (0 = onbeperkt).",
+  "Remove the user limit on your voice channel.": "Verwijder de gebruikerslimiet van je spraakkanaal.",
+  "Open a panel to rename your voice channel.": "Open een paneel om je spraakkanaal te hernoemen.",
+  "Make your voice channel private (lock out @everyone).": "Maak je spraakkanaal privé (sluit @everyone buiten).",
+  "Reopen your voice channel to @everyone.": "Open je spraakkanaal weer voor @everyone.",
+  "Reclaim your channel from a caretaker, or claim one whose owner left.": "Neem je kanaal terug van een beheerder, of claim een kanaal waarvan de eigenaar is vertrokken.",
+  "Transfer ownership of your voice channel to another member.": "Draag het eigenaarschap van je spraakkanaal over aan een ander lid.",
+  "Start a vote to kick a member from your voice channel.": "Start een stemming om een lid uit je spraakkanaal te schoppen.",
+  "Set the name shown for you in @@owner@@ rooms (or \"reset\").": "Stel de naam in die voor jou getoond wordt in @@owner@@-kamers (of \"reset\").",
+  "Check the bot's responsiveness.": "Controleer de reactiesnelheid van de bot.",
+  "Get a link to invite this bot to another server.": "Krijg een link om deze bot naar een andere server uit te nodigen.",
+  "Get a link to this bot's source code.": "Krijg een link naar de broncode van deze bot.",
+  "Get started with Auto-Voice-Channels: status, setup, and quick actions.": "Aan de slag met Auto-Voice-Channels: status, instellingen en snelle acties.",
+
+  "Maximum members (0 to ${MAX_USER_LIMIT}).": "Maximaal aantal leden (0 tot ${MAX_USER_LIMIT}).",
+  "The new owner (must be in the channel).": "De nieuwe eigenaar (moet in het kanaal zijn).",
+  "The member to votekick.": "Het lid om te votekicken.",
+  "Why (optional).": "Waarom (optioneel).",
+  "Your custom name, or \"reset\".": "Je eigen naam, of \"reset\"."
+}
