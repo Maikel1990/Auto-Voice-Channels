@@ -131,10 +131,12 @@ export function buildCommandDefinitions(
         .setName('nick')
         .setDescription('Set the name shown for you in @@owner@@ rooms (or "reset").')
         .setDescriptionLocalizations({ nl: "Stel de naam in die voor jou getoond wordt in @@owner@@-kamers (of \"reset\")." })
+        .setDescriptionLocalizations({ nl: "Stel de naam in die voor jou getoond wordt in @@owner@@-kamers (of \"reset\")." })
         .addStringOption((o) =>
           o
             .setName('name')
             .setDescription('Your custom name, or "reset".')
+        .setDescriptionLocalizations({ nl: "Je eigen naam, of \"reset\"." })
         .setDescriptionLocalizations({ nl: "Je eigen naam, of \"reset\"." })
         .setDescriptionLocalizations({ nl: "Je eigen naam, of \"reset\"." })
             .setRequired(true)
