@@ -45,7 +45,10 @@ services:
       # Host port kept uncommon to avoid clashing with other local services
       # (8080 is a common conflict). Container still serves on 8080.
       - '8477:8080'
+    volumes:
+      - blocklist_data:/app/data
     restart: unless-stopped
 
 volumes:
   pgdata:
+  blocklist_data:
