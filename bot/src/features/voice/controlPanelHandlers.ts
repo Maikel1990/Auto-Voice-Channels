@@ -9,10 +9,13 @@ import {
   parsePanelId,
   parsePanelModalId,
   parsePanelSelectId,
+  parseBlocklistSelectId,
   buildLimitModal,
   buildKickModal,
   buildTransferSelectRow,
+  buildBlocklistMessage,
 } from './controlPanel.js';
+import { getBlocked, addBlocked, removeBlocked } from './blocklist.js';
 
 export interface PanelDeps {
   voiceCommands: VoiceCommands;
@@ -75,6 +78,12 @@ export async function handlePanelButton(
     await interaction.reply({ content: deps.formatResult(res), ephemeral: true });
     return true;
   }
+  if (action === 'blocklist') {
+    const blocked = getBlocked(userId);
+    const { content, components } = buildBlocklistMessage(channelId, blocked);
+    await interaction.reply({ content, components, ephemeral: true });
+    return true;
+  }
   if (action === 'reclaim') {
     const res = await deps.run<CommandResult>(guildId, 'panel:reclaim', () =>
       deps.voiceCommands.claim(guildId, channelId, userId),
@@ -89,6 +98,31 @@ export async function handlePanelSelect(
   interaction: UserSelectMenuInteraction,
   deps: PanelDeps,
 ): Promise<boolean> {
+  const blockParsed = parseBlocklistSelectId(interaction.customId);
+  if (blockParsed) {
+    const { action, channelId } = blockParsed;
+    const userId = interaction.user.id;
+    const targetId = interaction.values[0];
+    if (!targetId) return false;
+
+    const res =
+      action === 'blockadd' ? addBlocked(userId, targetId) : removeBlocked(userId, targetId);
+
+    if (!res.ok) {
+      await interaction.reply({ content: `?? ${res.message}`, ephemeral: true });
+      return true;
+    }
+
+    const blocked = getBlocked(userId);
+    const { content, components } = buildBlocklistMessage(channelId, blocked);
+    const verb = action === 'blockadd' ? 'geblokkeerd' : 'gedeblokkeerd';
+    await interaction.update({
+      content: `? <@${targetId}> ${verb}.\n\n${content}`,
+      components,
+    });
+    return true;
+  }
+
   const parsed = parsePanelSelectId(interaction.customId);
   if (!parsed) return false;
   const { channelId } = parsed;
