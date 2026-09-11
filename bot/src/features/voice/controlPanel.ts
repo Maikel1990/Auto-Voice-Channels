@@ -19,7 +19,8 @@ export type PanelAction =
   | 'public'
   | 'reclaim'
   | 'transfer'
-  | 'kick';
+  | 'kick'
+  | 'blocklist';
 
 export function panelId(action: PanelAction, channelId: string): string {
   return `${PANEL_PREFIX}${action}:${channelId}`;
@@ -39,6 +40,7 @@ export function parsePanelId(
     'reclaim',
     'transfer',
     'kick',
+    'blocklist',
   ];
   if (!action || !valid.includes(action as PanelAction) || !channelId) return null;
   return { action: action as PanelAction, channelId };
@@ -84,7 +86,13 @@ export function buildControlPanelRows(
       .setLabel('Kick')
       .setStyle(ButtonStyle.Danger),
   );
-  return [row1, row2];
+  const row3 = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId(panelId('blocklist', channelId))
+      .setLabel('Geblokkeerd')
+      .setStyle(ButtonStyle.Secondary),
+  );
+  return [row1, row2, row3];
 }
 
 export function buildLimitModal(channelId: string): ModalBuilder {
@@ -127,6 +135,61 @@ export function buildTransferSelectRow(
       .setMinValues(1)
       .setMaxValues(1),
   );
+}
+
+export function blockAddSelectId(channelId: string): string {
+  return `${PANEL_SELECT_PREFIX}blockadd:${channelId}`;
+}
+
+export function blockRemoveSelectId(channelId: string): string {
+  return `${PANEL_SELECT_PREFIX}blockremove:${channelId}`;
+}
+
+export function parseBlocklistSelectId(
+  customId: string,
+): { action: 'blockadd' | 'blockremove'; channelId: string } | null {
+  if (!customId.startsWith(PANEL_SELECT_PREFIX)) return null;
+  const [, , action, channelId] = customId.split(':');
+  if (!action || !['blockadd', 'blockremove'].includes(action) || !channelId) return null;
+  return { action: action as 'blockadd' | 'blockremove', channelId };
+}
+
+/** User-select to add someone to the owner's blocklist. */
+export function buildBlockAddSelectRow(
+  channelId: string,
+): ActionRowBuilder<UserSelectMenuBuilder> {
+  return new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
+    new UserSelectMenuBuilder()
+      .setCustomId(blockAddSelectId(channelId))
+      .setPlaceholder('Kies iemand om te blokkeren')
+      .setMinValues(1)
+      .setMaxValues(1),
+  );
+}
+
+/** Builds the blocklist management message: current list + add/remove selects. */
+export function buildBlocklistMessage(
+  channelId: string,
+  blockedIds: string[],
+): { content: string; components: ActionRowBuilder<UserSelectMenuBuilder>[] } {
+  const list =
+    blockedIds.length === 0
+      ? 'Je hebt nog niemand geblokkeerd.'
+      : blockedIds.map((id) => `<@${id}>`).join(', ');
+  const content = `**Geblokkeerde leden**\n${list}\n\nDeze mensen kunnen niet meer joinen in kanalen die jij aanmaakt.`;
+
+  const components = [buildBlockAddSelectRow(channelId)];
+  if (blockedIds.length > 0) {
+    const removeRow = new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
+      new UserSelectMenuBuilder()
+        .setCustomId(blockRemoveSelectId(channelId))
+        .setPlaceholder('Kies iemand om te deblokkeren')
+        .setMinValues(1)
+        .setMaxValues(1),
+    );
+    components.push(removeRow);
+  }
+  return { content, components };
 }
 
 export function buildTransferModal(channelId: string): ModalBuilder {
