@@ -5,6 +5,8 @@ I created this fork to add some extra features to an already amazing bot, curren
 2. Panel in temp voice channels to control some settings
 3. Possibility to block people from youre own created voice channels
 
+If you need any of these just fork/copy or run this bot, otherwise i strongly suggest to use the public available bot and support them.
+
 
 # Auto Voice Channels
 
