@@ -524,6 +524,7 @@ async function main(): Promise<void> {
     client,
     dispatcher,
     voiceCommands,
+    actions,
     settings: settingsService,
     votekick,
     privacy,

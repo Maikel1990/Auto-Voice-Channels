@@ -61,6 +61,7 @@ import {
   type PermissionProblemTracker,
   type PrivacyService,
   type VoiceCommands,
+  type VoiceActions,
   type VoiceFeature,
   type VoteKickManager,
 } from '../features/voice/index.js';
@@ -171,6 +172,7 @@ export interface InteractionDeps {
   client: Client;
   dispatcher: GuildDispatcher;
   voiceCommands: VoiceCommands;
+  actions: VoiceActions;
   settings: GuildSettingsService;
   votekick: VoteKickManager;
   privacy: PrivacyService;
@@ -2573,6 +2575,7 @@ Already subscribed? Add the new server ` +
   async function handleUserSelect(interaction: UserSelectMenuInteraction): Promise<void> {
     const handled = await handlePanelSelect(interaction, {
       voiceCommands: deps.voiceCommands,
+        actions: deps.actions,
       privacy: deps.privacy,
       votekick: deps.votekick,
       run,
@@ -2702,6 +2705,7 @@ Already subscribed? Add the new server ` +
         }      }
       const handled = await handlePanelButton(interaction, {
         voiceCommands: deps.voiceCommands,
+        actions: deps.actions,
         privacy: deps.privacy,
         votekick: deps.votekick,
         run,
@@ -2827,6 +2831,7 @@ Already subscribed? Add the new server ` +
     if (interaction.customId.startsWith(PANEL_MODAL_PREFIX)) {
       const handled = await handlePanelModal(interaction, {
         voiceCommands: deps.voiceCommands,
+        actions: deps.actions,
         privacy: deps.privacy,
         votekick: deps.votekick,
         run,

@@ -27,6 +27,7 @@ import {
 } from './guildSettings.js';
 import { isPermissionError } from './discordAdapter.js';
 import { buildControlPanelRows } from './controlPanel.js';
+import { getBlocked } from './blocklist.js';
 import {
   permissionProblemMessage,
   type PermissionOperation,
@@ -711,6 +712,20 @@ export class VoiceFeature {
       this.deps.logger.warn(
         { guildId, secondaryId: newChannelId, err },
         'could not post control panel',
+      );
+    }
+
+    try {
+      const blockedIds = getBlocked(member.id);
+      for (const blockedId of blockedIds) {
+        await this.deps.actions
+          .setMemberConnect(guildId, newChannelId, blockedId, false)
+          .catch(() => undefined);
+      }
+    } catch (err) {
+      this.deps.logger.warn(
+        { guildId, secondaryId: newChannelId, err },
+        'could not apply owner blocklist to new channel',
       );
     }
     try {

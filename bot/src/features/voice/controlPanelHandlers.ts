@@ -4,6 +4,7 @@ import type {
   PrivacyService,
   VoiceCommands,
   VoteKickManager,
+  VoiceActions,
 } from './index.js';
 import {
   parsePanelId,
@@ -21,6 +22,7 @@ export interface PanelDeps {
   voiceCommands: VoiceCommands;
   privacy: PrivacyService;
   votekick: VoteKickManager;
+  actions: VoiceActions;
   run: <T>(guildId: string, name: string, task: () => Promise<T>) => Promise<T>;
   formatResult: (res: CommandResult) => string;
 }
@@ -107,6 +109,13 @@ export async function handlePanelSelect(
 
     const res =
       action === 'blockadd' ? addBlocked(userId, targetId) : removeBlocked(userId, targetId);
+
+    if (res.ok) {
+      const allow = action === 'blockremove';
+      await deps.actions
+        .setMemberConnect(interaction.guildId!, channelId, targetId, allow)
+        .catch(() => undefined);
+    }
 
     if (!res.ok) {
       await interaction.reply({ content: `?? ${res.message}`, ephemeral: true });
