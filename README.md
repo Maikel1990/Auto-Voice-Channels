@@ -1,3 +1,11 @@
+# Why this fork
+
+I created this fork to add some extra features to an already amazing bot, currently included is:
+1. Dutch translations (i use this bot in an growing Dutch Community)
+2. Panel in temp voice channels to control some settings
+3. Possibility to block people from youre own created voice channels
+
+
 # Auto Voice Channels
 
 A Discord bot that creates a voice channel the moment someone joins your creator
